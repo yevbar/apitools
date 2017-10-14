@@ -1,66 +1,115 @@
 <!DOCTYPE html>
 <html>
-	<head>
-		<title>API Tools</title>
-	</head>
-	<script>
-		function sent() {
-			console.log('hai')
-		}
-	</script>
-	<style>
-		body {
-			background: #5e0000;
-		}
-		.frame {
-			background: #eaf2ff;
-			position: absolute;
-			top: 10px;
-			left: 10px;
-			right: 10px;
-			bottom: 10px;
-		}
-		.black {
-			background: #070000;
-			display: flex;
-			position: absolute;
-			top: 25px;
-			left: 2px;
-			right: 2px;
-			bottom: 2px;
-		}
-		table {
-			padding-left: 15px;
-		}
-		input:focus {
-    outline:none !important;
-		}
-		th {
-			color: #f4f2f2;
-		}
-		.text {
-			background: #070000;
-			border-color: #070000;
-			color: #f4f2f2;
-			padding: 10px;
-		}
-	</style>
-	<body>
-		<div class="frame">
-			<div class="black"
-				<ul>
-						<li>
-							<table>
-								<th>> </th>
-								<th>
-									<form onsubmit="return sent()">
-										<input type="text" autofocus="autofocus" class="text">
-									</form>
-								</th>
-							</table>
-						</li>
-				</ul>
-			</div>
-		</div>
-	<body>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <title>API Tools</title>
+  
+  <style>
+    
+body {
+  background: #5e0000;
+  color: white;
+  font-family: "Arial";
+  font-weight: bold;
+}
+
+#frame {
+  background: #eaf2ff;
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  right: 10px;
+  bottom: 10px;
+}
+
+#black {
+  background: #070000;
+  display: flex;
+  position: absolute;
+  top: 25px;
+  left: 2px;
+  right: 2px;
+  bottom: 2px;
+}
+
+table {
+  padding-left: 15px;
+}
+
+input:focus {
+  outline:none !important;
+}
+
+th {
+  color: #f4f2f2;
+}
+
+.text {
+  background: #070000;
+  border-color: #070000;
+  color: #f4f2f2;
+  padding: 10px;
+}
+
+#lines {
+  margin-top: 15px;
+  margin-left: 15px;
+}
+    
+  </style>
+  
+  <script>
+window.onload = function(){
+  document.getElementById("body").onkeypress = function(e){ keypress(e); };
+  document.getElementById("body").onkeydown = function(e) { keydown(e); };
+}
+  
+  
+function keypress(e){
+
+  var code = e.which;
+  var key = String.fromCharCode(code);
+  
+  var text = document.getElementById("input-text");
+  
+  if(code == 13){
+    var lines = document.getElementById("lines");
+    var toAdd = text.innerHTML;    
+    lines.removeChild(document.getElementById("input"));
+    
+    lines.innerHTML = lines.innerHTML + 
+      "<div>> " + toAdd + "</div>" + 
+      '<div id = "input">> <span id = "input-text"></span></div>';
+    
+
+  }
+  else 
+    text.innerHTML = text.innerHTML + key;
+}
+
+function keydown(e){
+  
+  var code = e.which;
+  var key = String.fromCharCode(code);
+  
+  var text = document.getElementById("input-text");
+  
+  if(code == 8){
+    var str = text.innerHTML;
+    if(str.length > 0)
+      text.innerHTML = str.substring(0, str.length - 1);
+  }
+}
+  </script>
+</head>
+<body id = "body">
+  <div id="frame">
+    <div id="black">
+      <div id = "lines">
+        <div id = "input">> <span id = "input-text"></span></div>
+      </div>
+    </div>
+  </div>
+<body>
 </html>
