@@ -66,8 +66,12 @@ th {
 window.onload = function(){
   document.getElementById("body").onkeypress = function(e){ keypress(e); };
   document.getElementById("body").onkeydown = function(e) { keydown(e); };
-}
   
+  send(false, ["Welcome!", "Please enter your username."]);
+}
+
+
+var username = null;
   
 function keypress(e){
 
@@ -76,25 +80,31 @@ function keypress(e){
   
   var text = document.getElementById("input-text");
   
-  if(code == 13){
-    var lines = document.getElementById("lines");
-    var toAdd = text.innerHTML;    
-    lines.removeChild(document.getElementById("input"));
-
-   
-    var newLines = lines.innerHTML + 
-      "<div>> " + toAdd + "</div>";
-    
-    if(toAdd)
-       newLines += "<div> " + execute(toAdd) + "</div>"
-    
-    newLines += '<div id = "input">> <span id = "input-text"></span></div>';
-    lines.innerHTML = newLines;
-    
-    lines.scrollTop = lines.scrollHeight;
-  }
+  if(code == 13)
+    execute(text.innerHTML);
   else 
     text.innerHTML = text.innerHTML + key;
+}
+
+function send(keepBefore, messages){
+  var lines = document.getElementById("lines");
+  var text = document.getElementById("input-text");
+  
+  var toAdd = null;    
+  if(text) toAdd = text.innerHTML;
+  lines.removeChild(document.getElementById("input"));
+
+  var newLines = lines.innerHTML;
+  if(keepBefore)
+    newLines += "<div>> " + toAdd + "</div>";
+
+  for(var i = 0; i < messages.length; i++)
+    newLines += "<div> " + messages[i] + "</div>";
+
+  newLines += '<div id = "input">> <span id = "input-text"></span></div>';
+  lines.innerHTML = newLines;
+
+  lines.scrollTop = lines.scrollHeight;
 }
 
 function keydown(e){
@@ -111,8 +121,43 @@ function keydown(e){
   }
 }
 
+function p(s){
+  send(true, [s]);
+}
+
+function queryServer(message){
+  var encoded = encodeURIComponent(message);
+  var page = "/exe/" + encodeURIComponent(username) + "/" + encoded;
+  console.log("QUERYING "+page);
+  
+  var request = new XMLHttpRequest();
+  request.onload = function() {
+    var response = request.response.message;
+    if(response)
+      send(true, [response]);
+  };
+  request.open("GET", page, true);
+  request.send();
+}
+
 function execute(command){
-  return command + ": command not found";
+  
+  if(username == null){
+    if(command.includes(" "))
+      p("'"+command+"': cannot use spaces in usernames!");
+    else {
+      username = command;
+      send(true, ["Greetings, " + command + "!"]);
+      queryServer(command);
+    }
+  }
+  else {
+    // ship it off
+    queryServer(command);
+    send(true, [command + ": command not found"]);
+  }
+  
+  
 }
   </script>
 </head>
