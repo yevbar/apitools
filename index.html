@@ -78,8 +78,11 @@ function keypress(e){
     var toAdd = text.innerHTML;    
     lines.removeChild(document.getElementById("input"));
     
+    var response = execute(toAdd);
+    
     lines.innerHTML = lines.innerHTML + 
       "<div>> " + toAdd + "</div>" + 
+      "<div> " + response + "</div>" + 
       '<div id = "input">> <span id = "input-text"></span></div>';
     
 
@@ -100,6 +103,10 @@ function keydown(e){
     if(str.length > 0)
       text.innerHTML = str.substring(0, str.length - 1);
   }
+}
+
+function execute(command){
+  return command + ": command not found";
 }
   </script>
 </head>
