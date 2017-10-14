@@ -126,8 +126,8 @@ function p(s){
 }
 
 function queryServer(message){
-  var encoded = encodeURIComponent(message);
-  var page = "/exe/" + encodeURIComponent(username) + "/" + encoded;
+  var encoded = encodeURIComponent(username + " " + message);
+  var page = "/" + encoded;
   console.log("QUERYING "+page);
   
   var request = new XMLHttpRequest();
