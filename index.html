@@ -55,6 +55,9 @@ th {
 #lines {
   margin-top: 15px;
   margin-left: 15px;
+  overflow: auto;
+  height: 94%;
+  width: 120%;
 }
     
   </style>
@@ -77,15 +80,18 @@ function keypress(e){
     var lines = document.getElementById("lines");
     var toAdd = text.innerHTML;    
     lines.removeChild(document.getElementById("input"));
-    
-    var response = execute(toAdd);
-    
-    lines.innerHTML = lines.innerHTML + 
-      "<div>> " + toAdd + "</div>" + 
-      "<div> " + response + "</div>" + 
-      '<div id = "input">> <span id = "input-text"></span></div>';
-    
 
+   
+    var newLines = lines.innerHTML + 
+      "<div>> " + toAdd + "</div>";
+    
+    if(toAdd)
+       newLines += "<div> " + execute(toAdd) + "</div>"
+    
+    newLines += '<div id = "input">> <span id = "input-text"></span></div>';
+    lines.innerHTML = newLines;
+    
+    lines.scrollTop = lines.scrollHeight;
   }
   else 
     text.innerHTML = text.innerHTML + key;
