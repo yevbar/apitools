@@ -56,21 +56,18 @@ def execute(command):
         if userMap[userID] == "TWILIO-1":
             userMap[userID] = "TWILIO-2"
 
-            command = "ACe4729ed00b7ee633e68d245dbfcaa041"
             sid[userID] = command
             return "Wot is your auth token?"
 
         if userMap[userID] == "TWILIO-2":
             userMap[userID] = "TWILIO-3"
 
-            command = "ed9fb066e3a71e0290313d46a140951b"
             auth[userID] = command
             return "Wot is your Twilio phone number?"
 
         if userMap[userID] == "TWILIO-3":
             userMap[userID] = "NONE"
 
-            command = "17079004043"
             number[userID] = command
 
             twilio = Twilio(sid[userID], auth[userID], number[userID])
@@ -90,7 +87,7 @@ def execute(command):
                 twilios[userID].sendText(toNum, toSend)
                 return "Sent '"+toSend+"' to "+toNum+"!"
             except:
-                return "Sent '"+toSend+"' to "+toNum+"!"
+                return "Failed to send '"+toSend+"' to "+toNum+"."
 
     return command + ": command not found"
 
