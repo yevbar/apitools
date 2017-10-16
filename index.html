@@ -4,14 +4,15 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width">
   <title>API Tools</title>
-  
+
   <style>
-    
+
 body {
   background: #5e0000;
   color: white;
   font-family: "Arial";
   font-weight: bold;
+  font-size: 20px;
 }
 
 #frame {
@@ -59,56 +60,72 @@ th {
   height: 94%;
   width: 120%;
 }
-    
+
+#paste {
+  position:absolute
+  z-index: 5;
+  margin-left: 50px;
+}
+
   </style>
-  
+
   <script type="text/javascript">
 
 window.onload = function(){
   document.getElementById("body").onkeypress = function(e){ keypress(e); };
   document.getElementById("body").onkeydown = function(e) { keydown(e); };
-  
+
   send(false, ["Welcome!", "Please enter your username."]);
-  
+
   var colIndex = 0;
   var t = 0;
-  setInterval(function(){ 
+  setInterval(function(){
     var colors = [255, 255, 255];
     colors[colIndex] = 255 - Math.floor(Math.abs(Math.sin(t) * 40));
-    
+
     t += 3.14 / 2000.0;
-    
+
     if(t >= 3.14){
       t = 0;
       colIndex = (colIndex + 1) % 3;
     }
-    
+
     document.getElementById("body").style.color = "rgb("+colors[0]+", "+colors[1]+", "+colors[2]+")";
+
+    document.getElementById("paste").focus();
+
+    document.getElementById("input-text").innerHTML = document.getElementById("paste").value;
   }, 1);
 }
 
 
 var username = null;
-  
+
 function keypress(e){
 
   var code = e.which;
   var key = String.fromCharCode(code);
-  
+
   var text = document.getElementById("input-text");
-  
+
   if(code == 13)
     execute(text.innerHTML);
-  else 
-    text.innerHTML = text.innerHTML + key;
+  else {
+    //text.innerHTML = text.innerHTML + key;
+    /*setTimeout(function(){
+      text.innerHTML = document.getElementById("paste").value;
+    }, 100);*/
+  }
 }
 
 function send(keepBefore, messages){
   var lines = document.getElementById("lines");
   var text = document.getElementById("input-text");
-  
-  var toAdd = null;    
+
+  var toAdd = null;
   if(text) toAdd = text.innerHTML;
+
+  document.getElementById("paste").value = "";
   lines.removeChild(document.getElementById("input"));
 
   var newLines = lines.innerHTML;
@@ -125,12 +142,12 @@ function send(keepBefore, messages){
 }
 
 function keydown(e){
-  
+
   var code = e.which;
   var key = String.fromCharCode(code);
-  
+
   var text = document.getElementById("input-text");
-  
+
   if(code == 8){
     var str = text.innerHTML;
     if(str.length > 0)
@@ -146,10 +163,10 @@ function queryServer(message){
   var encoded = encodeURIComponent(username + " " + message);
   var page = "/" + encoded;
   console.log("QUERYING "+page);
-  
+
   var request = new XMLHttpRequest();
   request.onload = function() {
-    var response = request.response.message;
+    var response = request.responseText;
     if(response)
       send(true, [response]);
   };
@@ -158,28 +175,27 @@ function queryServer(message){
 }
 
 function execute(command){
-  
+
   if(command.length <= 0){
     send(true, [""]);
     return;
   }
-  
+
   if(username == null){
     if(command.includes(" "))
       p("'"+command+"': cannot use spaces in usernames!");
     else {
       username = command;
-      send(true, ["Greetings, " + command + "!"]);
+      //send(true, ["Greetings, " + command + "!"]);
       queryServer(command);
     }
   }
   else {
     // ship it off
     queryServer(command);
-    send(true, [command + ": command not found"]);
   }
-  
-  
+
+
 }
   </script>
 </head>
@@ -191,5 +207,6 @@ function execute(command){
       </div>
     </div>
   </div>
+    <input type="text" id = "paste" autofocus></input>
 <body>
 </html>

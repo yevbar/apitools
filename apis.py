@@ -1,23 +1,18 @@
-"""
-	This is the file that will hold all of the function calls
-	The organization of this file will be classes that pertain
-		to each API
-	Naming should be done in camelCase and readable
-"""
+from twilio.rest import Client
 
-class Twilio(object):	
-	def Twilio(self, sid, auth, number):
-		from twilio.rest import Client
+class Twilio:
+	def __init__(self, sid, auth, number):
 		self.client = Client(sid,auth)
 		self.number = number;
-	
-	def sendText(toNum, message):
+
+	def sendText(self, toNum, message):
 		self.client.api.account.messages.create(
 			to=toNum,
 			from_=number,
 			body=message
 		)
 
+'''
 class Firebase(object):
 	def Firebase(self, serviceKey, databaseURL, path):
 		import firebase_admin
@@ -46,4 +41,5 @@ class Firebase(object):
 		if(len(path) > 0)
 			target = self.ref.child(path)
 		return target.get()
+'''
 		
